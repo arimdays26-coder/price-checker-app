@@ -16,6 +16,7 @@ export default function App() {
       setTimeout(() => {
         const mockResults = [
           { 
+            productName: 'Kirkland Signature 테킬라 아네호 750ml',
             status: '적합', 
             badgeColor: 'bg-green-500', 
             amazonMin: '$450 MXN', 
@@ -24,6 +25,7 @@ export default function App() {
             reason: '현재 창고형 매장 판매가 대비 멕시코 아마존 최저가가 높아 충분한 마진 확보가 가능합니다.' 
           },
           { 
+            productName: 'Member’s Mark 유기농 올리브유 1L',
             status: '부적합', 
             badgeColor: 'bg-red-500', 
             amazonMin: '$310 MXN', 
@@ -32,12 +34,13 @@ export default function App() {
             reason: '멕시코 아마존 내 경쟁 과다로 인해 최저가가 낮게 형성되어 있어 손실 위험이 큽니다.' 
           },
           { 
+            productName: 'Kirkland Signature 프로틴 바 세트 (20개입)',
             status: '보류', 
             badgeColor: 'bg-yellow-500', 
             amazonMin: '$400 MXN', 
             amazonMax: '$510 MXN', 
             marginRate: '15% (검토 필요)',
-            reason: '아마존 최저/최고가 격차가 큽니다. 배송비 및 수수료를 감안한 세부 재계산이 필요합니다.' 
+            reason: '멕시코 아마존 최저/최고가 격차가 큽니다. 배송비 및 수수료를 감안한 세부 재계산이 필요합니다.' 
           }
         ];
         const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)];
@@ -49,93 +52,95 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-min min-h-screen bg-gray-100 p-4 font-sans max-w-md mx-auto">
+    <div className="flex flex-col items-center justify-min min-h-screen bg-gray-100 p-3 font-sans max-w-md mx-auto">
       {/* 상단 타이틀 */}
-      <header className="w-full mb-4 text-center">
-        <h1 className="text-xl font-bold text-gray-800">멕시코 소싱 & 아마존 가격 비교</h1>
-        <p className="text-xs text-gray-500">가격표를 촬영하면 아마존 시세와 즉시 비교합니다.</p>
+      <header className="w-full mb-2 text-center">
+        <h1 className="text-lg font-bold text-gray-900">멕시코 소싱 & 아마존 가격 비교</h1>
       </header>
 
-      {/* 카메라 바로가기 영역 (아이콘 크기 및 패딩 최적화) */}
-      <div className="w-full bg-white rounded-2xl shadow-md p-4 flex flex-col items-center border border-gray-200">
-        {!image ? (
-          <label className="w-full h-40 border-2 border-dashed border-blue-400 rounded-xl flex flex-col items-center justify-center cursor-pointer bg-blue-50 hover:bg-blue-100 transition">
-            {/* 아이콘 크기를 w-8 h-8로 축소하여 과도하게 큰 현상 수정 */}
-            <svg className="w-8 h-8 text-blue-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span className="text-xs font-semibold text-blue-600">가격표 촬영하기</span>
-            <span className="text-[10px] text-gray-400 mt-0.5">(카메라가 즉시 실행됩니다)</span>
-            <input 
-              type="file" 
-              accept="image/*" 
-              capture="environment" 
-              className="hidden" 
-              onChange={handleImageCapture} 
-            />
-          </label>
-        ) : (
-          <div className="w-full flex flex-col items-center">
-            {/* 촬영된 이미지 확대 문제 해결을 위한 object-contain 및 높이 조정 */}
-            <div className="relative w-full h-56 rounded-xl overflow-hidden shadow-inner bg-gray-900 flex items-center justify-center">
-              <img src={image} alt="촬영된 가격표" className="max-h-full max-w-full object-contain" />
+      {/* 카메라 촬영 영역 (사진 크기를 1/4 수준으로 대폭 축소) */}
+      <div className="w-full bg-white rounded-xl shadow-sm p-2.5 flex items-center justify-between border border-gray-200">
+        <div className="flex items-center space-x-3">
+          {!image ? (
+            <div className="w-16 h-16 bg-blue-50 border border-blue-300 rounded-lg flex items-center justify-center text-blue-500">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
             </div>
-            <label className="mt-3 w-full py-2 bg-gray-800 text-white text-center text-xs font-medium rounded-lg cursor-pointer hover:bg-gray-700 transition">
-              다시 촬영하기
-              <input 
-                type="file" 
-                accept="image/*" 
-                capture="environment" 
-                className="hidden" 
-                onChange={handleImageCapture} 
-              />
-            </label>
+          ) : (
+            <div className="w-16 h-16 bg-black rounded-lg overflow-hidden flex items-center justify-center">
+              <img src={image} alt="촬영된 가격표" className="w-full h-full object-cover" />
+            </div>
+          )}
+          <div>
+            <span className="text-xs font-bold text-gray-800 block">가격표 스캔 모드</span>
+            <span className="text-[10px] text-gray-500">버튼을 눌러 즉시 촬영하세요</span>
           </div>
-        )}
+        </div>
+
+        <label className="px-3 py-2 bg-blue-600 text-white text-xs font-bold rounded-lg cursor-pointer hover:bg-blue-700 transition shadow-sm">
+          {image ? '다시 촬영' : '촬영하기'}
+          <input 
+            type="file" 
+            accept="image/*" 
+            capture="environment" 
+            className="hidden" 
+            onChange={handleImageCapture} 
+          />
+        </label>
       </div>
 
       {/* 로딩 상태 표시 */}
       {isLoading && (
-        <div className="w-full mt-4 text-center py-5 bg-white rounded-xl shadow-sm">
-          <p className="text-xs text-blue-600 font-medium animate-pulse">바코드 인식 및 멕시코 아마존 시세 조회 중...</p>
+        <div className="w-full mt-3 text-center py-4 bg-white rounded-xl shadow-sm">
+          <p className="text-xs text-blue-600 font-bold animate-pulse">바코드 인식 및 멕시코 아마존 상품 매칭 중...</p>
         </div>
       )}
 
       {/* 분석 결과 및 아마존 가격 정보 카드 */}
       {analysisResult && !isLoading && (
-        <div className="w-full mt-4 bg-white rounded-2xl shadow-md p-4 border border-gray-200 space-y-3">
+        <div className="w-full mt-3 bg-white rounded-2xl shadow-md p-4 border border-gray-200 space-y-3">
           
-          <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-            <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">종합 판정</span>
-            <span className={`px-2.5 py-0.5 text-white text-xs font-bold rounded-full ${analysisResult.badgeColor}`}>
+          {/* 1. 제품명을 메인 타이틀 창으로 배치 */}
+          <div className="bg-gray-50 p-3 rounded-xl border border-gray-200">
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-0.5">인식된 상품명</span>
+            <h2 className="text-sm font-extrabold text-gray-900">{analysisResult.productName}</h2>
+          </div>
+
+          {/* 2. 종합 판정 (적합/부적합/보류) 뱃지 */}
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs text-gray-700 font-bold">판정 결과</span>
+            <span className={`px-4 py-1 text-white text-xs font-extrabold rounded-full shadow-xs ${analysisResult.badgeColor}`}>
               {analysisResult.status}
             </span>
           </div>
 
-          <div className="bg-orange-50 rounded-xl p-3 border border-orange-100">
+          {/* 3. 멕시코 아마존 시세 정보 */}
+          <div className="bg-orange-50 rounded-xl p-3 border border-orange-200">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-orange-800">
+              <span className="text-xs font-bold text-orange-900">
                 🛒 멕시코 아마존(Amazon MX) 시세
               </span>
-              <span className="text-[11px] text-gray-600 font-medium">마진: {analysisResult.marginRate}</span>
+              <span className="text-xs text-gray-800 font-extrabold">마진: {analysisResult.marginRate}</span>
             </div>
             <div className="grid grid-cols-2 gap-2 text-center">
-              <div className="bg-white p-2 rounded-lg shadow-xs border border-orange-200">
-                <span className="block text-[10px] text-gray-400">아마존 최저가</span>
-                <span className="text-xs font-bold text-gray-800">{analysisResult.amazonMin}</span>
+              <div className="bg-white p-2.5 rounded-lg shadow-xs border border-orange-200">
+                <span className="block text-[11px] text-gray-500 font-semibold">아마존 최저가</span>
+                <span className="text-sm font-black text-gray-900">{analysisResult.amazonMin}</span>
               </div>
-              <div className="bg-white p-2 rounded-lg shadow-xs border border-orange-200">
-                <span className="block text-[10px] text-gray-400">아마존 최고가</span>
-                <span className="text-xs font-bold text-gray-800">{analysisResult.amazonMax}</span>
+              <div className="bg-white p-2.5 rounded-lg shadow-xs border border-orange-200">
+                <span className="block text-[11px] text-gray-500 font-semibold">아마존 최고가</span>
+                <span className="text-sm font-black text-gray-900">{analysisResult.amazonMax}</span>
               </div>
             </div>
           </div>
 
-          <div className="pt-1">
+          {/* 4. 상세 사유 토글 영역 */}
+          <div className="pt-1 border-t border-gray-100">
             <button 
               onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full flex justify-between items-center text-xs font-semibold text-gray-600 focus:outline-none py-1"
+              className="w-full flex justify-between items-center text-xs font-bold text-gray-700 focus:outline-none py-2"
             >
               <span>상세 판정 이유 및 분석 보기</span>
               <svg 
@@ -149,9 +154,9 @@ export default function App() {
             </button>
 
             {isExpanded && (
-              <div className="mt-2 p-3 bg-gray-50 rounded-lg text-xs text-gray-600 leading-relaxed border border-gray-100">
+              <div className="mt-1 p-3 bg-gray-50 rounded-lg text-xs text-gray-700 leading-relaxed border border-gray-200">
                 <p><strong>사유:</strong> {analysisResult.reason}</p>
-                <p className="mt-1 text-gray-400">* 창고형 매장 바코드 기반 실시간 멕시코 아마존 매칭 결과입니다.</p>
+                <p className="mt-1 text-gray-500">* 창고형 매장 바코드 기반 실시간 멕시코 아마존 매칭 결과입니다.</p>
               </div>
             )}
           </div>
