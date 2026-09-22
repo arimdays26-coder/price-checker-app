@@ -58,28 +58,28 @@ export default function App() {
         <h1 className="text-lg font-bold text-gray-900">멕시코 소싱 & 아마존 가격 비교</h1>
       </header>
 
-      {/* 카메라 촬영 영역 (사진 크기를 1/4 수준으로 대폭 축소) */}
+      {/* 카메라 촬영 영역 (사진 크기를 1/10 수준인 미니 썸네일로 극단적 축소) */}
       <div className="w-full bg-white rounded-xl shadow-sm p-2.5 flex items-center justify-between border border-gray-200">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2.5">
           {!image ? (
-            <div className="w-16 h-16 bg-blue-50 border border-blue-300 rounded-lg flex items-center justify-center text-blue-500">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-8 h-8 bg-blue-50 border border-blue-300 rounded flex items-center justify-center text-blue-500 flex-shrink-0">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
           ) : (
-            <div className="w-16 h-16 bg-black rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="w-8 h-8 bg-black rounded overflow-hidden flex items-center justify-center flex-shrink-0">
               <img src={image} alt="촬영된 가격표" className="w-full h-full object-cover" />
             </div>
           )}
           <div>
-            <span className="text-xs font-bold text-gray-800 block">가격표 스캔 모드</span>
-            <span className="text-[10px] text-gray-500">버튼을 눌러 즉시 촬영하세요</span>
+            <span className="text-xs font-bold text-gray-800 block">가격표 스캔 완료</span>
+            <span className="text-[10px] text-gray-500">사진 크기 최소화됨</span>
           </div>
         </div>
 
-        <label className="px-3 py-2 bg-blue-600 text-white text-xs font-bold rounded-lg cursor-pointer hover:bg-blue-700 transition shadow-sm">
+        <label className="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg cursor-pointer hover:bg-blue-700 transition shadow-sm">
           {image ? '다시 촬영' : '촬영하기'}
           <input 
             type="file" 
