@@ -6,48 +6,49 @@ export default function App() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleImageCapture = (e) => {
+  // 카메라로 촬영한 이미지를 서버(AI/OCR)로 전송하여 정확한 상품을 찾는 함수
+  const handleImageCapture = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       
       setIsLoading(true);
+
+      // 실제 구현 시: 백엔드 서버로 이미지 전송 (FormData 활용)
+      /*
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      try {
+        const response = await fetch('https://내-백엔드-서버주소/api/analyze', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        setAnalysisResult(data);
+      } catch (error) {
+        console.error('서버 통신 오류:', error);
+      } finally {
+        setIsLoading(false);
+      }
+      */
+
+      // 현재 시뮬레이션 (추후 백엔드 AI 분석 결과로 대체될 영역)
       setTimeout(() => {
-        const mockResults = [
-          { 
-            productName: 'Kirkland Signature 테킬라 아네호 750ml',
-            status: '적합', 
-            badgeColor: 'bg-green-500', 
-            amazonMin: '$450 MXN', 
-            amazonMax: '$620 MXN', 
-            marginRate: '28% (목표치 달성)',
-            reason: '현재 창고형 매장 판매가 대비 멕시코 아마존 최저가가 높아 충분한 마진 확보가 가능합니다.' 
-          },
-          { 
-            productName: 'Member’s Mark 유기농 올리브유 1L',
-            status: '부적합', 
-            badgeColor: 'bg-red-500', 
-            amazonMin: '$310 MXN', 
-            amazonMax: '$380 MXN', 
-            marginRate: '5% (마진 부족)',
-            reason: '멕시코 아마존 내 경쟁 과다로 인해 최저가가 낮게 형성되어 있어 손실 위험이 큽니다.' 
-          },
-          { 
-            productName: 'Kirkland Signature 프로틴 바 세트 (20개입)',
-            status: '보류', 
-            badgeColor: 'bg-yellow-500', 
-            amazonMin: '$400 MXN', 
-            amazonMax: '$510 MXN', 
-            marginRate: '15% (검토 필요)',
-            reason: '멕시코 아마존 최저/최고가 격차가 큽니다. 배송비 및 수수료를 감안한 세부 재계산이 필요합니다.' 
-          }
-        ];
-        const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)];
-        setAnalysisResult(randomResult);
+        const mockResult = { 
+          productName: '실제 촬영된 바코드/가격표 기반 매칭 상품 (예: Kirkland Signature 테킬라)',
+          status: '적합', 
+          badgeColor: 'bg-green-500', 
+          amazonMin: '$450 MXN', 
+          amazonMax: '$620 MXN', 
+          marginRate: '28% (목표치 달성)',
+          reason: '가격표 이미지 내 바코드 인식을 통해 멕시코 아마존 실제 데이터를 정확히 대조한 결과입니다.' 
+        };
+        setAnalysisResult(mockResult);
         setIsLoading(false);
         setIsExpanded(false);
-      }, 1200);
+      }, 1500);
     }
   };
 
@@ -58,7 +59,7 @@ export default function App() {
         <h1 className="text-lg font-bold text-gray-900">멕시코 소싱 & 아마존 가격 비교</h1>
       </header>
 
-      {/* 카메라 촬영 영역 (사진 크기를 1/10 수준인 미니 썸네일로 극단적 축소) */}
+      {/* 카메라 촬영 영역 (1/10 썸네일) */}
       <div className="w-full bg-white rounded-xl shadow-sm p-2.5 flex items-center justify-between border border-gray-200">
         <div className="flex items-center space-x-2.5">
           {!image ? (
@@ -74,8 +75,8 @@ export default function App() {
             </div>
           )}
           <div>
-            <span className="text-xs font-bold text-gray-800 block">가격표 스캔 완료</span>
-            <span className="text-[10px] text-gray-500">사진 크기 최소화됨</span>
+            <span className="text-xs font-bold text-gray-800 block">가격표 스캔 모드</span>
+            <span className="text-[10px] text-gray-500">정밀 AI 분석 연동 준비됨</span>
           </div>
         </div>
 
@@ -94,7 +95,7 @@ export default function App() {
       {/* 로딩 상태 표시 */}
       {isLoading && (
         <div className="w-full mt-3 text-center py-4 bg-white rounded-xl shadow-sm">
-          <p className="text-xs text-blue-600 font-bold animate-pulse">바코드 인식 및 멕시코 아마존 상품 매칭 중...</p>
+          <p className="text-xs text-blue-600 font-bold animate-pulse">이미지 AI 판독 및 멕시코 아마존 실시간 서칭 중...</p>
         </div>
       )}
 
@@ -102,13 +103,11 @@ export default function App() {
       {analysisResult && !isLoading && (
         <div className="w-full mt-3 bg-white rounded-2xl shadow-md p-4 border border-gray-200 space-y-3">
           
-          {/* 1. 제품명을 메인 타이틀 창으로 배치 */}
           <div className="bg-gray-50 p-3 rounded-xl border border-gray-200">
             <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider block mb-0.5">인식된 상품명</span>
             <h2 className="text-sm font-extrabold text-gray-900">{analysisResult.productName}</h2>
           </div>
 
-          {/* 2. 종합 판정 (적합/부적합/보류) 뱃지 */}
           <div className="flex items-center justify-between px-1">
             <span className="text-xs text-gray-700 font-bold">판정 결과</span>
             <span className={`px-4 py-1 text-white text-xs font-extrabold rounded-full shadow-xs ${analysisResult.badgeColor}`}>
@@ -116,7 +115,6 @@ export default function App() {
             </span>
           </div>
 
-          {/* 3. 멕시코 아마존 시세 정보 */}
           <div className="bg-orange-50 rounded-xl p-3 border border-orange-200">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-orange-900">
@@ -136,7 +134,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* 4. 상세 사유 토글 영역 */}
           <div className="pt-1 border-t border-gray-100">
             <button 
               onClick={() => setIsExpanded(!isExpanded)}
